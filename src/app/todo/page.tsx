@@ -1,16 +1,7 @@
 import { client } from "@/libs/client";
+import { dataType } from "@/types";
 import { revalidatePath } from "next/cache";
-
-type dataType = {
-  contents: contentsType[];
-  totalCount: number;
-  offset: number;
-  limit: number;
-};
-type contentsType = {
-  id: string;
-  title: string;
-};
+import Link from "next/link";
 
 export default async function todo() {
   const data: dataType = await client.get({
@@ -33,6 +24,12 @@ export default async function todo() {
         {data?.contents.map((value, index) => (
           <div key={value.id} className="flex my-[0.5rem]">
             <div className="w-[20rem]">{value.title}</div>
+            <Link
+              className="bg-green-500 text-white rounded-[0.8rem] px-[1rem] mr-[0.5rem] cursor-pointer"
+              href={`/todo/${value.id}`}
+            >
+              編集する
+            </Link>
           </div>
         ))}
       </div>
