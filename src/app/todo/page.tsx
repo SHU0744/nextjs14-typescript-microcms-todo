@@ -17,6 +17,13 @@ export default async function todo() {
     revalidatePath("/todo", "page");
   };
 
+  const deleteTodo = async (formData: FormData) => {
+    "use server";
+    const id = formData.get("id") as string;
+    await client.delete({ endpoint: "todo", contentId: id });
+    revalidatePath("/todo", "page");
+  };
+
   return (
     <>
       <div className="mt-[1rem] w-full mx-[2rem]">
@@ -30,6 +37,14 @@ export default async function todo() {
             >
               編集する
             </Link>
+            <form action={deleteTodo}>
+              <input type="hidden" name="id" value={value.id} />
+              <input
+                type="submit"
+                value={"削除"}
+                className="bg-red-500 text-white rounded-[0.8rem] px-[1rem] cursor-pointer"
+              />
+            </form>
           </div>
         ))}
       </div>
