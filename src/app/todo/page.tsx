@@ -37,7 +37,7 @@ export default async function todo() {
         ))}
       </div>
       <div className="mt-[1rem] w-full mx-[2rem]">
-        <h2 className="text-[1.6rem] mb-[0.5rem]">Create</h2>
+        <h2 className="text-[1.6rem] mb-[0.5rem]">CREATE</h2>
         <form action={createTodo}>
           <input
             type="text"
