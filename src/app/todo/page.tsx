@@ -65,6 +65,11 @@ export default async function todo() {
           />
         </form>
       </div>
+      <div className="mt-4">
+        <Link href={"/"} className="underline text-blue-800">
+          TOPへ
+        </Link>
+      </div>
     </>
   );
 }

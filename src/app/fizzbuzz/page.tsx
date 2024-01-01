@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const fizzbuzz = () => {
@@ -55,6 +56,11 @@ const fizzbuzz = () => {
           <li key={index}>{item}</li>
         ))}
       </ul> */}
+      <div className="mt-4">
+        <Link href={"/"} className="underline text-blue-800">
+          TOPへ
+        </Link>
+      </div>
     </div>
   );
 };
