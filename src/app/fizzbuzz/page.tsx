@@ -1,7 +1,31 @@
 "use client";
 
+import { initStateType, typePayloadType } from "@/types";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
+
+const CALC_OPTIONS: string[] = ["add", "minus", "divide", "multiply"];
+
+const reducer = (
+  prev: initStateType,
+  { type, payload }: typePayloadType
+): any => {
+  switch (type) {
+    case "change":
+      const { name, value } = payload;
+      return { ...prev, [name]: value };
+    case "add":
+      return { ...prev, result: prev.a + prev.b };
+    case "minus":
+      return { ...prev, result: prev.a - prev.b };
+    case "divide":
+      return { ...prev, result: prev.a / prev.b };
+    case "multiply":
+      return { ...prev, result: prev.a * prev.b };
+    default:
+      throw new Error("不明なactionです。");
+  }
+};
 
 const fizzbuzz = () => {
   const [count, setCount] = useState<number>(1);
@@ -24,13 +48,26 @@ const fizzbuzz = () => {
     );
   };
 
-  // const fizzBuzzList: (string | number)[] = [];
-  // for (let i = 1; i <= 100; i++) {
-  //   let value: string = "";
-  //   if (i % 3 === 0) value += "Fizz";
-  //   if (i % 5 === 0) value += "Buzz";
-  //   fizzBuzzList.push(value || i);
-  // }
+  const initState: initStateType = {
+    a: 10,
+    b: 2,
+    result: 12,
+  };
+  const [state, dispatch] = useReducer(reducer, initState);
+
+  const calculate = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    dispatch({
+      type: e.target.value,
+      payload: { name: "", value: 0 },
+    });
+  };
+
+  const numChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    dispatch({
+      type: "change",
+      payload: { name: e.target.name, value: parseInt(e.target.value) },
+    });
+  };
 
   return (
     <div>
@@ -46,16 +83,44 @@ const fizzbuzz = () => {
           -
         </button>
       </div>
-      {/* <p>
-        数字を1から100まで順番に出力していき ・3の倍数の時「 Fizz 」
-        ・5の倍数の時「 Buzz 」 ・3かつ5の倍数の時「 FizzBuzz 」を表示させる
-        ※それ以外の値はそのまま表示
-      </p>
-      <ul>
-        {fizzBuzzList.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul> */}
+
+      <div className="mt-6">
+        <div>
+          a:
+          <input
+            type="number"
+            name="a"
+            value={state.a}
+            className="border-solid border-[0.1rem] mr-[0.5rem]"
+            onChange={numChangeHandler}
+          />
+        </div>
+        <div>
+          b:
+          <input
+            type="number"
+            name="b"
+            value={state.b}
+            className="border-solid border-[0.1rem] mr-[0.5rem]"
+            onChange={numChangeHandler}
+          />
+        </div>
+      </div>
+      <select
+        value={state.type}
+        className="border-solid border-[0.1rem] mr-[0.5rem]"
+        onChange={calculate}
+      >
+        {CALC_OPTIONS.map((item) => {
+          return (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          );
+        })}
+      </select>
+      <h3>結果：{state.result}</h3>
+
       <div className="mt-4">
         <Link href={"/"} className="underline text-blue-800">
           TOPへ
