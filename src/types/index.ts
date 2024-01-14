@@ -13,6 +13,7 @@ export type initStateType = {
   a: number;
   b: number;
   result: number;
+  check: string | number;
 };
 
 export type typePayloadType = {
